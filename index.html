@@ -3,114 +3,144 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>医学实验室成员信息</title>
+<title>实验室生活展示</title>
 <style>
     body {
         font-family: 'Microsoft YaHei', sans-serif;
         margin: 0;
-        background-color: #f6f9fc;
+        background-color: #f4f6f8;
         color: #333;
     }
     header {
         text-align: center;
-        padding: 30px 15px;
-        background-color: #007acc;
+        padding: 40px 20px;
+        background-color: #4cafdf;
         color: white;
     }
-    header h1 {
-        margin: 0;
-        font-size: 2em;
-    }
-    header p {
-        margin-top: 10px;
-        font-size: 1em;
-        opacity: 0.9;
-    }
-    .container {
+    header h1 { margin: 0; font-size: 2.5em; }
+    header p { margin-top: 10px; font-size: 1.1em; opacity: 0.9; }
+
+    /* 成员卡片 */
+    .members {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 20px;
         max-width: 1200px;
         margin: 40px auto;
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-        gap: 20px;
         padding: 0 20px;
     }
-    .card {
+    .member-card {
         background: white;
-        border-radius: 10px;
+        border-radius: 12px;
         box-shadow: 0 2px 10px rgba(0,0,0,0.08);
         overflow: hidden;
+        cursor: pointer;
         transition: transform 0.2s;
     }
-    .card:hover {
-        transform: translateY(-5px);
+    .member-card:hover { transform: translateY(-5px); }
+    .member-card img { width: 100%; height: 200px; object-fit: cover; }
+    .member-info { padding: 15px; }
+    .member-info h3 { margin: 0; color: #4cafdf; }
+    .member-info p { margin: 5px 0; font-size: 0.9em; color: #555; }
+
+    /* 弹窗 */
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 100;
+        left: 0; top: 0;
+        width: 100%; height: 100%;
+        background-color: rgba(0,0,0,0.6);
+        justify-content: center;
+        align-items: center;
     }
-    .card img {
+    .modal-content {
+        background: white;
+        border-radius: 12px;
+        max-width: 500px;
+        width: 90%;
+        padding: 20px;
+        position: relative;
+    }
+    .close-btn {
+        position: absolute;
+        top: 10px; right: 15px;
+        font-size: 1.5em;
+        cursor: pointer;
+    }
+
+    /* 照片/视频墙 */
+    .gallery {
+        max-width: 1200px;
+        margin: 40px auto;
+        padding: 0 20px;
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 15px;
+    }
+    .gallery img, .gallery video {
         width: 100%;
-        height: 220px;
+        border-radius: 10px;
         object-fit: cover;
     }
-    .card-content {
-        padding: 15px;
-    }
-    .card-content h3 {
-        margin: 0;
-        color: #007acc;
-    }
-    .card-content p {
-        margin: 5px 0;
-        font-size: 0.9em;
-        color: #555;
-    }
-    .contact {
-        margin-top: 10px;
-        font-size: 0.85em;
-        color: #777;
-    }
+
 </style>
 </head>
 <body>
 
 <header>
-    <h1>医学实验室成员信息</h1>
-    <p>致力于医学研究与创新的团队</p>
+    <h1>XX 医学实验室</h1>
+    <p>科研与生活并行，团队活力无限</p>
 </header>
 
-<div class="container">
-
-    <!-- 成员 1 -->
-    <div class="card">
-        <img src="images/member1.jpg" alt="成员照片">
-        <div class="card-content">
+<!-- 成员卡片 -->
+<div class="members">
+    <div class="member-card" onclick="openModal('张三', '博士', '喜欢登山、摄影', '科研理念：肿瘤早期筛查')">
+        <img src="images/member1.jpg" alt="张三">
+        <div class="member-info">
             <h3>张三</h3>
-            <p>职位：实验室主任</p>
-            <p>研究方向：肿瘤早期筛查</p>
-            <div class="contact">📧 zhangsan@lab.com</div>
+            <p>博士</p>
         </div>
     </div>
-
-    <!-- 成员 2 -->
-    <div class="card">
-        <img src="images/member2.jpg" alt="成员照片">
-        <div class="card-content">
+    <div class="member-card" onclick="openModal('李四', '硕士', '喜欢打篮球、旅行', '科研理念：免疫治疗创新')">
+        <img src="images/member2.jpg" alt="李四">
+        <div class="member-info">
             <h3>李四</h3>
-            <p>职位：副研究员</p>
-            <p>研究方向：免疫治疗</p>
-            <div class="contact">📧 lisi@lab.com</div>
+            <p>硕士</p>
         </div>
     </div>
-
-    <!-- 成员 3 -->
-    <div class="card">
-        <img src="images/member3.jpg" alt="成员照片">
-        <div class="card-content">
-            <h3>王五</h3>
-            <p>职位：博士后</p>
-            <p>研究方向：基因编辑技术</p>
-            <div class="contact">📧 wangwu@lab.com</div>
-        </div>
-    </div>
-
 </div>
+
+<!-- 弹窗 -->
+<div class="modal" id="memberModal">
+    <div class="modal-content">
+        <span class="close-btn" onclick="closeModal()">&times;</span>
+        <h2 id="modalName"></h2>
+        <p id="modalPosition"></p>
+        <p id="modalHobby"></p>
+        <p id="modalResearch"></p>
+    </div>
+</div>
+
+<!-- 照片/视频展示 -->
+<div class="gallery">
+    <img src="images/lab1.jpg" alt="实验室活动">
+    <img src="images/lab2.jpg" alt="科研照片">
+    <video src="videos/lab_video.mp4" controls></video>
+</div>
+
+<script>
+    function openModal(name, position, hobby, research) {
+        document.getElementById('modalName').innerText = name;
+        document.getElementById('modalPosition').innerText = position;
+        document.getElementById('modalHobby').innerText = hobby;
+        document.getElementById('modalResearch').innerText = research;
+        document.getElementById('memberModal').style.display = 'flex';
+    }
+    function closeModal() {
+        document.getElementById('memberModal').style.display = 'none';
+    }
+</script>
 
 </body>
 </html>
